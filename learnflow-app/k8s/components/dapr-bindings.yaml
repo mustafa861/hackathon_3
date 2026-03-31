@@ -1,0 +1,19 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: bindings-kafka
+  namespace: learnflow
+spec:
+  type: bindings.kafka
+  version: v1
+  metadata:
+  - name: brokers
+    value: "kafka.kafka.svc.cluster.local:9092"
+  - name: topics
+    value: "learning.events,code.events,exercise.events,struggle.events"
+  - name: consumerGroup
+    value: "learnflow-bindings"
+  - name: publishTopic
+    value: "learning.events"
+  - name: direction
+    value: "input, output"

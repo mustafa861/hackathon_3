@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: triage-agent
+  namespace: learnflow
+  labels:
+    app: triage-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: triage-agent
+  template:
+    metadata:
+      labels:
+        app: triage-agent
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "triage-agent"
+        dapr.io/app-port: "8000"
+        dapr.io/app-protocol: "http"
+    spec:
+      containers:
+      - name: triage-agent
+        image: learnflow-backend:latest
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: 100m
+          limits:
+            memory: 256Mi
+            cpu: 250m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: triage-agent
+  namespace: learnflow
+spec:
+  selector:
+    app: triage-agent
+  ports:
+  - port: 80
+    targetPort: 8000
+  type: ClusterIP
