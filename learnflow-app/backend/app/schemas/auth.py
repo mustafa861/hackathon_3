@@ -1,12 +1,18 @@
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
+from enum import Enum
+
+class Role(str, Enum):
+    STUDENT = "STUDENT"
+    TEACHER = "TEACHER"
+    ADMIN = "ADMIN"
 
 class UserCreate(BaseModel):
     email: str
     password: str = Field(..., min_length=8, max_length=128)
     name: Optional[str] = None
-    role: str = "STUDENT"
+    role: Role = Role.STUDENT
 
 class UserLogin(BaseModel):
     email: str
