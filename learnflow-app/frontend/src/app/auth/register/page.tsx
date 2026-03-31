@@ -28,15 +28,24 @@ export default function RegisterPage() {
     setError(null);
 
     try {
-      const response = await fetch("/api/auth/register", {
+      const response = await fetch("/api/auth/sign-up/email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+          name: data.name,
+        }),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Registration failed");
+        const text = await response.text();
+        let errorMessage = "Registration failed";
+        try {
+          const errorData = JSON.parse(text);
+          errorMessage = errorData.message || errorMessage;
+        } catch {}
+        throw new Error(errorMessage);
       }
 
       router.push("/auth/login?registered=true");
@@ -62,13 +71,13 @@ export default function RegisterPage() {
 
         <form className="mt-8 space-y-4" onSubmit={handleSubmit(onSubmit)}>
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm ">
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="name" className="label-text">
+            <label htmlFor="name" className="label-text" >
               Name (optional)
             </label>
             <input
@@ -81,7 +90,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label htmlFor="email" className="label-text">
+            <label htmlFor="email" className="label-text" >
               Email address
             </label>
             <input

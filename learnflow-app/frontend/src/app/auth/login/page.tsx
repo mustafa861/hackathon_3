@@ -25,15 +25,23 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch("/api/auth/sign-in/email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+        }),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Login failed");
+        const text = await response.text();
+        let errorMessage = "Login failed";
+        try {
+          const errorData = JSON.parse(text);
+          errorMessage = errorData.message || errorMessage;
+        } catch {}
+        throw new Error(errorMessage);
       }
 
       router.push("/dashboard");
@@ -73,7 +81,7 @@ export default function LoginPage() {
               id="email"
               type="email"
               autoComplete="email"
-              className={`input-field ${errors.email ? "border-red-500" : ""}`}
+              className={`input-field ${errors.email ? "border-red-500" : "" }`}
               {...register("email")}
             />
             {errors.email && (

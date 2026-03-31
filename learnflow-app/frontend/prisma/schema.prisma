@@ -7,113 +7,65 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  STUDENT
-  TEACHER
-  ADMIN
-}
-
-enum MasteryLevel {
-  BEGINNER
-  LEARNING
-  PROFICIENT
-  MASTERED
-}
-
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
+  id            String   @id @default(cuid())
   name          String?
-  passwordHash  String
-  role          Role      @default(STUDENT)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  lastLoginAt   DateTime?
-  
-  profile       UserProfile?
-  progress      Progress[]
-  submissions   CodeSubmission[]
-  exercises     Exercise[]  @relation("ExerciseCreator")
-  sessions      Session[]
-  
-  @@index([email])
-  @@index([role])
-}
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  role          String   @default("STUDENT")
 
-model UserProfile {
-  id          String   @id @default(cuid())
-  userId      String   @unique
-  avatar      String?
-  bio         String?
-  timezone    String   @default("UTC")
-  streak      Int      @default(0)
-  lastActive  DateTime @default(now())
-  
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessions      Session[]
+  accounts      Account[]
+
+  @@map("user")
 }
 
 model Session {
   id           String   @id @default(cuid())
-  userId       String
-  token        String   @unique
   expiresAt    DateTime
+  token        String   @unique
   createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   ipAddress    String?
   userAgent    String?
-  
+  userId       String
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
+  @@map("session")
   @@index([userId])
   @@index([token])
-  @@index([expiresAt])
 }
 
-model Progress {
-  id              String       @id @default(cuid())
-  userId          String
-  moduleId        Int
-  topic           String
-  masteryScore    Float        @default(0)
-  masteryLevel    MasteryLevel @default(BEGINNER)
-  exercisesCompleted Int       @default(0)
-  quizScores      Float[]
-  lastUpdated     DateTime     @default(now())
-  
-  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@unique([userId, moduleId, topic])
+model Account {
+  id                    String   @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@map("account")
   @@index([userId])
 }
 
-model CodeSubmission {
-  id          String   @id @default(cuid())
-  userId      String
-  code        String
-  language    String   @default("python")
-  output      String?
-  error       String?
-  status      String   @default("pending")
-  executedAt  DateTime @default(now())
-  
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@index([userId])
-  @@index([executedAt])
-}
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-model Exercise {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  moduleId    Int
-  difficulty  String   @default("easy")
-  starterCode String?
-  solution    String?
-  testCases   Json?
-  createdBy   String
-  
-  creator     User     @relation("ExerciseCreator", fields: [createdBy], references: [id])
-  
-  @@index([moduleId])
-  @@index([difficulty])
+  @@map("verification")
 }

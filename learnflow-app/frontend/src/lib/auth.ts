@@ -20,7 +20,7 @@ export const auth = betterAuth({
         type: "string",
         required: false,
         defaultValue: "STUDENT",
-        input: false,
+        input: true,
       },
     },
   },
@@ -30,13 +30,6 @@ export const auth = betterAuth({
     cookieCache: {
       enabled: true,
       maxAge: 5 * 60,
-    },
-  },
-  advanced: {
-    defaultCookieAttributes: {
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
     },
   },
 });
