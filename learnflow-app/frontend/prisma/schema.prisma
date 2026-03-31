@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+enum MasteryLevel {
+  BEGINNER
+  LEARNING
+  PROFICIENT
+  MASTERED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  passwordHash  String
+  role          Role      @default(STUDENT)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastLoginAt   DateTime?
+  
+  profile       UserProfile?
+  progress      Progress[]
+  submissions   CodeSubmission[]
+  exercises     Exercise[]  @relation("ExerciseCreator")
+  sessions      Session[]
+  
+  @@index([email])
+  @@index([role])
+}
+
+model UserProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  avatar      String?
+  bio         String?
+  timezone    String   @default("UTC")
+  streak      Int      @default(0)
+  lastActive  DateTime @default(now())
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  token        String   @unique
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  ipAddress    String?
+  userAgent    String?
+  
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+}
+
+model Progress {
+  id              String       @id @default(cuid())
+  userId          String
+  moduleId        Int
+  topic           String
+  masteryScore    Float        @default(0)
+  masteryLevel    MasteryLevel @default(BEGINNER)
+  exercisesCompleted Int       @default(0)
+  quizScores      Float[]
+  lastUpdated     DateTime     @default(now())
+  
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, moduleId, topic])
+  @@index([userId])
+}
+
+model CodeSubmission {
+  id          String   @id @default(cuid())
+  userId      String
+  code        String
+  language    String   @default("python")
+  output      String?
+  error       String?
+  status      String   @default("pending")
+  executedAt  DateTime @default(now())
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([executedAt])
+}
+
+model Exercise {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  moduleId    Int
+  difficulty  String   @default("easy")
+  starterCode String?
+  solution    String?
+  testCases   Json?
+  createdBy   String
+  
+  creator     User     @relation("ExerciseCreator", fields: [createdBy], references: [id])
+  
+  @@index([moduleId])
+  @@index([difficulty])
+}
