@@ -1,36 +1,21 @@
 import { NextResponse } from "next/server";
+import Groq from "groq-sdk";
 
-const AGENT_RESPONSES: Record<string, { response: string; agent: string }> = {
-  explain: {
-    agent: "Concepts Agent",
-    response: "Great question! Let me explain that concept with examples.\n\nIn Python, this works by...",
-  },
-  error: {
-    agent: "Debug Agent",
-    response: "I see the error. The issue is likely in how you're using the syntax.\n\nHere's what's happening:\n1. The error indicates...\n2. The fix is to...\n\nTry this instead:",
-  },
-  review: {
-    agent: "Code Review Agent",
-    response: "Your code looks good! Here are some suggestions:\n\n- Consider using a list comprehension for cleaner code\n- Add type hints for better readability\n- The variable naming could be more descriptive",
-  },
-  exercise: {
-    agent: "Exercise Agent",
-    response: "Here's a practice exercise for you:\n\nWrite a function that takes a list of numbers and returns only the even ones.\n\n```python\ndef get_evens(numbers):\n    # Your code here\n    pass\n```",
-  },
-  progress: {
-    agent: "Progress Agent",
-    response: "Here's your progress summary:\n\n- Module 1 (Basics): 85% - Proficient\n- Module 2 (Control Flow): 60% - Learning\n- Module 3 (Data Structures): 35% - Beginner\n\nKeep practicing loops to improve your Control Flow score!",
-  },
-};
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY || "",
+});
 
-function detectIntent(message: string): string {
-  const lower = message.toLowerCase();
-  if (lower.includes("error") || lower.includes("bug") || lower.includes("wrong") || lower.includes("doesn't work")) return "error";
-  if (lower.includes("review") || lower.includes("check my code") || lower.includes("improve")) return "review";
-  if (lower.includes("exercise") || lower.includes("practice") || lower.includes("challenge")) return "exercise";
-  if (lower.includes("progress") || lower.includes("how am i doing") || lower.includes("score")) return "progress";
-  return "explain";
-}
+const SYSTEM_PROMPT = `You are LearnFlow, a friendly and patient Python tutor for beginners. 
+
+Rules:
+- Always respond in a clear, encouraging tone
+- Use code examples with proper formatting
+- Keep explanations simple and easy to understand
+- If the user asks something not related to Python, gently redirect them to Python topics
+- When showing code, always use markdown code blocks with python language tag
+- Ask follow-up questions to keep the conversation going
+- If the user shares an error, explain what it means and how to fix it
+- If the user asks for practice, give them a small coding challenge`;
 
 export async function POST(request: Request) {
   try {
@@ -41,17 +26,36 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 });
     }
 
-    const intent = detectIntent(message);
-    const agentResponse = AGENT_RESPONSES[intent] || AGENT_RESPONSES.explain;
+    if (!process.env.GROQ_API_KEY || process.env.GROQ_API_KEY === "your_api_key_here") {
+      return NextResponse.json({
+        response: "⚠️ Groq API key is not configured.\n\nPlease add your API key to the .env file:\n\n```\nGROQ_API_KEY=\"your_key_here\"\n```\n\nGet a free key at: https://console.groq.com/keys",
+        agent: "System",
+      });
+    }
+
+    const completion = await groq.chat.completions.create({
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        { role: "user", content: message },
+      ],
+      model: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
+      temperature: 0.7,
+      max_tokens: 1024,
+    });
+
+    const reply = completion.choices[0]?.message?.content || "Sorry, I couldn't generate a response. Please try again.";
 
     return NextResponse.json({
-      response: agentResponse.response,
-      agent: agentResponse.agent,
-      intent,
+      response: reply,
+      agent: "AI Tutor",
     });
-  } catch (error) {
+  } catch (error: any) {
+    console.error("Groq API error:", error);
     return NextResponse.json(
-      { error: "Failed to process message" },
+      {
+        response: `Sorry, I encountered an error: ${error?.message || "Unknown error"}\n\nPlease check your Groq API key in the .env file.`,
+        agent: "System",
+      },
       { status: 500 }
     );
   }

@@ -7,7 +7,7 @@ router = APIRouter(prefix="/code", tags=["code execution"])
 class CodeRequest(BaseModel):
     code: str
     language: str = "python"
-    timeout: int = 5
+    timeout: int = 30
 
 class CodeResponse(BaseModel):
     output: str | None = None

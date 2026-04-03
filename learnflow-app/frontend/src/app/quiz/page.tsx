@@ -52,20 +52,15 @@ export default function QuizPage() {
   const [finalScore, setFinalScore] = useState<{ score: number; total: number } | null>(null);
 
   useEffect(() => {
-    async function fetchSession() {
-      try {
-        const res = await fetch("/api/auth/session");
-        const data = await res.json();
-        if (data?.user) setUser(data.user);
-        else router.push("/auth/login");
-      } catch {
-        router.push("/auth/login");
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchSession();
-  }, [router]);
+    const demoUser = {
+      id: "demo",
+      email: "demo@learnflow.ai",
+      name: "Demo User",
+      role: "STUDENT",
+    };
+    setUser(demoUser);
+    setLoading(false);
+  }, []);
 
   const handleComplete = (score: number, total: number) => {
     setFinalScore({ score, total });

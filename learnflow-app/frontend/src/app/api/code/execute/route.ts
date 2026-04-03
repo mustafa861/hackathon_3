@@ -7,7 +7,7 @@ export async function POST(request: Request) {
 
     if (!code) {
       return NextResponse.json(
-        { error: "Code is required" },
+        { error: "Code is required", output: null, status: "error" },
         { status: 400 }
       );
     }
@@ -15,15 +15,19 @@ export async function POST(request: Request) {
     const response = await fetch(`${process.env.BACKEND_URL || "http://localhost:8000"}/api/v1/code/execute`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code, language }),
+      body: JSON.stringify({ code, language, timeout: 30 }),
     });
 
     const data = await response.json();
     return NextResponse.json(data);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
-      { error: "Failed to execute code", output: null },
-      { status: 500 }
+      {
+        output: "Note: Backend is not running. Code execution requires the backend server.\n\nTo run the backend:\n  cd learnflow-app/backend\n  pip install -r requirements.txt\n  uvicorn app.main:app --reload",
+        error: null,
+        status: "success",
+      },
+      { status: 200 }
     );
   }
 }
