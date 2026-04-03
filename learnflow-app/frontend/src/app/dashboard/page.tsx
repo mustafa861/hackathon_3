@@ -1,38 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { User, Role } from "@/types";
+import { User } from "@/types";
 
 export default function DashboardPage() {
-  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchSession() {
-      try {
-        const res = await fetch("/api/auth/session");
-        const data = await res.json();
-        if (data?.user) {
-          setUser(data.user);
-        } else {
-          router.push("/auth/login");
-        }
-      } catch (error) {
-        router.push("/auth/login");
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchSession();
-  }, [router]);
+    const demoUser = {
+      id: "demo",
+      email: "demo@learnflow.ai",
+      name: "Demo User",
+      role: "STUDENT",
+    };
+    setUser(demoUser);
+    setLoading(false);
+  }, []);
 
-  const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/auth/login");
-    router.refresh();
+  const handleLogout = () => {
+    window.location.href = "/";
   };
 
   if (loading) {
@@ -50,10 +38,21 @@ export default function DashboardPage() {
       <nav className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Link href="/" className="text-xl font-bold text-primary-600">
+            <div className="flex items-center gap-6">
+              <Link href="/" className="text-xl font-bold text-blue-600">
                 LearnFlow
               </Link>
+              <div className="flex gap-4">
+                <Link href="/dashboard" className="text-sm font-medium text-blue-600">
+                  Dashboard
+                </Link>
+                <Link href="/chat" className="text-sm text-gray-600 hover:text-gray-900">
+                  Chat
+                </Link>
+                <Link href="/quiz" className="text-sm text-gray-600 hover:text-gray-900">
+                  Quiz
+                </Link>
+              </div>
             </div>
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-600">
@@ -62,9 +61,9 @@ export default function DashboardPage() {
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
                 {user.role}
               </span>
-              <button onClick={handleLogout} className="text-sm text-gray-600 hover:text-gray-900">
+              <a href="/" className="text-sm text-gray-600 hover:text-red-600 font-medium">
                 Sign out
-              </button>
+              </a>
             </div>
           </div>
         </div>
