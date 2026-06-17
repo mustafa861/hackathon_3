@@ -10,18 +10,22 @@ export interface User {
 }
 
 export const MASTERY_COLORS = {
-  NOVICE: "#ef4444",
-  LEARNING: "#eab308",
-  COMPETENT: "#3b82f6",
-  PROFICIENT: "#22c55e",
-  EXPERT: "#a855f7",
+  NOVICE: "text-red-500",
+  BEGINNER: "text-orange-500",    // ✅ add karo
+  LEARNING: "text-yellow-500",
+  COMPETENT: "text-blue-500",
+  PROFICIENT: "text-green-500",
+  MASTERED: "text-purple-500",    // ✅ add karo
+  EXPERT: "text-purple-700",
 };
 
 export const MASTERY_LABELS = {
   NOVICE: "Novice",
+  BEGINNER: "Beginner",           // ✅ add karo
   LEARNING: "Learning",
   COMPETENT: "Competent",
   PROFICIENT: "Proficient",
+  MASTERED: "Mastered",           // ✅ add karo
   EXPERT: "Expert",
 };
 
