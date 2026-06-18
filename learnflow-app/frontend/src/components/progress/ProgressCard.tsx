@@ -26,7 +26,7 @@ export default function ProgressCard({
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="font-semibold">
+        <h3 className="font-semibold text-gray-900">
           Module {moduleId}: {moduleName}
         </h3>
         <span className={`text-sm font-medium ${MASTERY_COLORS[masteryLevel]}`}>
