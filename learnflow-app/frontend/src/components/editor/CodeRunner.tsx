@@ -65,7 +65,7 @@ export default function CodeRunner({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Code Editor</h3>
+        <h3 className="text-lg font-semibold text-black-900 dark:text-black">Code Editor</h3>
         <div className="flex gap-2">
           <button
             onClick={handleCopy}
