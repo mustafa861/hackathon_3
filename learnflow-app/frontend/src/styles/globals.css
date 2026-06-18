@@ -40,7 +40,7 @@ body {
   }
 
   .card {
-    @apply bg-white shadow-sm rounded-lg border border-gray-200 p-6;
+    @apply bg-white shadow-sm rounded-lg border border-gray-200 p-6 text-gray-900;
   }
 
   .error-text {
