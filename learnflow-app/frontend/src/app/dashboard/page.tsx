@@ -3,32 +3,30 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { User, Role } from "@/types";
-
-
 import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-const router = useRouter();
+  const router = useRouter();
 
- useEffect(() => {
-  const token = localStorage.getItem("token");
-  if (!token) { setLoading(false); return; }
-  fetch("https://muahmmadmustafa-hackathon3.hf.space/api/v1/auth/me", {
-    headers: { Authorization: `Bearer ${token}` }
-  })
-  .then(r => r.json())
-  .then(data => setUser(data))
-  .catch(() => setLoading(false))
-  .finally(() => setLoading(false));
-}, []);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) { setLoading(false); return; }
+    const stored = localStorage.getItem("user");
+    if (stored) {
+      setUser(JSON.parse(stored));
+    }
+    setLoading(false);
+  }, []);
 
   const handleLogout = () => {
-  localStorage.removeItem("token");
-  document.cookie = "auth-token=; path=/; max-age=0";
-  router.push("/auth/login");
-};
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    document.cookie = "auth-token=; path=/; max-age=0";
+    router.push("/auth/login");
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -36,9 +34,6 @@ const router = useRouter();
       </div>
     );
   }
-<button onClick={handleLogout} className="text-sm text-gray-600 hover:text-red-600 font-medium">
-  Sign out
-</button>
 
   if (!user) return null;
 
@@ -70,9 +65,9 @@ const router = useRouter();
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
                 {user.role}
               </span>
-              <a href="/" className="text-sm text-gray-600 hover:text-red-600 font-medium">
+              <button onClick={handleLogout} className="text-sm text-gray-600 hover:text-red-600 font-medium">
                 Sign out
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -123,8 +118,6 @@ const router = useRouter();
     </div>
   );
 }
-
-
 
 const PYTHON_MODULES = [
   { id: 1, name: "Basics", topics: ["Variables", "Data Types", "Input/Output", "Operators", "Type Conversion"] },
