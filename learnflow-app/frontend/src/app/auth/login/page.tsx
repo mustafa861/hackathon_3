@@ -18,6 +18,9 @@ export default function LoginPage() {
     formState: { errors },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      role: "STUDENT",
+    },
   });
 
   const onSubmit = async (data: LoginInput) => {
@@ -31,6 +34,7 @@ export default function LoginPage() {
         body: JSON.stringify({
           email: data.email,
           password: data.password,
+          role: data.role,
         }),
       });
 
@@ -102,6 +106,20 @@ export default function LoginPage() {
             {errors.password && (
               <p className="error-text">{errors.password.message}</p>
             )}
+          </div>
+
+          <div>
+            <label htmlFor="role" className="label-text">
+              I am a...
+            </label>
+            <select
+              id="role"
+              className="input-field"
+              {...register("role")}
+            >
+              <option value="STUDENT">Student</option>
+              <option value="TEACHER">Teacher</option>
+            </select>
           </div>
 
           <button type="submit" className="btn-primary" disabled={isLoading}>
