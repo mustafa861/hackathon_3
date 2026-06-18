@@ -87,7 +87,7 @@ export default function QuizPage() {
       </nav>
 
       <main className="max-w-3xl mx-auto py-6 px-4">
-        <h1 className="text-2xl font-bold mb-6">Python Basics Quiz</h1>
+        <h1 className="text-black">Python Basics Quiz</h1>
         <Quiz questions={SAMPLE_QUESTIONS} onComplete={handleComplete} />
         {finalScore && (
           <div className="mt-6 card text-center">
