@@ -1,5 +1,7 @@
 export type Role = "STUDENT" | "TEACHER" | "ADMIN";
 
+export type MasteryLevel = "NOVICE" | "BEGINNER" | "LEARNING" | "COMPETENT" | "PROFICIENT" | "MASTERED" | "EXPERT";
+
 export interface User {
   id: string;
   email: string;
@@ -9,23 +11,23 @@ export interface User {
   updatedAt: Date;
 }
 
-export const MASTERY_COLORS = {
+export const MASTERY_COLORS: Record<MasteryLevel, string> = {
   NOVICE: "text-red-500",
-  BEGINNER: "text-orange-500",    // ✅ add karo
+  BEGINNER: "text-orange-500",
   LEARNING: "text-yellow-500",
   COMPETENT: "text-blue-500",
   PROFICIENT: "text-green-500",
-  MASTERED: "text-purple-500",    // ✅ add karo
+  MASTERED: "text-purple-500",
   EXPERT: "text-purple-700",
 };
 
-export const MASTERY_LABELS = {
+export const MASTERY_LABELS: Record<MasteryLevel, string> = {
   NOVICE: "Novice",
-  BEGINNER: "Beginner",           // ✅ add karo
+  BEGINNER: "Beginner",
   LEARNING: "Learning",
   COMPETENT: "Competent",
   PROFICIENT: "Proficient",
-  MASTERED: "Mastered",           // ✅ add karo
+  MASTERED: "Mastered",
   EXPERT: "Expert",
 };
 
