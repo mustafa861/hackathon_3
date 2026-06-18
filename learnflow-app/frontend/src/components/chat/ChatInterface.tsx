@@ -22,7 +22,7 @@ function ChatMessage({ message }: ChatMessageProps) {
     <div className={`flex gap-3 ${isUser ? "flex-row-reverse" : ""}`}>
       <div
         className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-          isUser ? "bg-primary-600" : "bg-purple-600"
+          isUser ? "bg-blue-600" : "bg-purple-600"
         }`}
       >
         {isUser ? (
@@ -33,7 +33,7 @@ function ChatMessage({ message }: ChatMessageProps) {
       </div>
       <div
         className={`max-w-[80%] rounded-lg px-4 py-3 ${
-          isUser ? "bg-primary-600 text-white" : "bg-gray-100 text-gray-900"
+          isUser ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-900"
         }`}
       >
         {message.agent && (
@@ -165,13 +165,13 @@ export default function ChatInterface() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Ask about Python concepts, debugging, exercises..."
-            className="flex-1 resize-none border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="flex-1 resize-none border rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows={2}
           />
           <button
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
-            className="self-end px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="self-end px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Send size={18} />
           </button>
