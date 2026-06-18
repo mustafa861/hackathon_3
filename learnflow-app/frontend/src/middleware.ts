@@ -6,7 +6,7 @@ const authPaths = ["/auth/login", "/auth/register"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const sessionCookie = request.cookies.get("better-auth.session_token");
+  const sessionCookie = request.cookies.get("auth-token");
   const isAuthenticated = !!sessionCookie;
 
   if (protectedPaths.some((path) => pathname.startsWith(path))) {

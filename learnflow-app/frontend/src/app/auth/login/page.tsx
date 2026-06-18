@@ -41,6 +41,7 @@ export default function LoginPage() {
 
       const result = await response.json();
       localStorage.setItem("token", result.access_token);
+      document.cookie = `auth-token=${result.access_token}; path=/; max-age=${7 * 24 * 60 * 60}`;
       router.push("/dashboard");
       router.refresh();
     } catch (err) {
