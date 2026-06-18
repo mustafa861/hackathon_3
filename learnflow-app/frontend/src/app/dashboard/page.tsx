@@ -35,7 +35,7 @@ export default function DashboardPage() {
     );
   }
 
-  if (!user) return null;
+  if (!user) { router.push("/auth/login"); return null; }
 
   return (
     <div className="min-h-screen bg-gray-50">
