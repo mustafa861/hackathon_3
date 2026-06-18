@@ -60,7 +60,7 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
     return (
       <div className="card text-center">
         <Trophy size={48} className="mx-auto mb-4 text-yellow-500" />
-        <h2 className="text-2xl font-bold mb-2">Quiz Complete!</h2>
+        <h2 className="text-2xl font-bold mb-2 text-gray-900">Quiz Complete!</h2>
         <p className="text-4xl font-bold text-primary-600 mb-2">
           {score}/{questions.length}
         </p>
@@ -102,7 +102,7 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
       </div>
 
       <div className="card">
-        <h3 className="text-lg font-semibold mb-4">{currentQuestion.question}</h3>
+        <h3 className="text-lg font-semibold mb-4 text-gray-900">{currentQuestion.question}</h3>
 
         {currentQuestion.code && (
           <pre className="bg-gray-900 text-green-300 p-4 rounded-lg text-sm font-mono mb-4 overflow-x-auto">
@@ -152,7 +152,7 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
                         <XCircle size={14} className="text-white" />
                       )}
                   </div>
-                  <span className="text-sm">{option}</span>
+                  <span className="text-sm text-gray-900">{option}</span>
                 </div>
               </button>
             );
