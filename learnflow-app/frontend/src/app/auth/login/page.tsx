@@ -25,7 +25,7 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const response = await fetch("/api/auth/sign-in/email", {
+      const response = await fetch(`https://muahmmadmustafa-hackathon3.hf.space/api/v1/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -35,15 +35,12 @@ export default function LoginPage() {
       });
 
       if (!response.ok) {
-        const text = await response.text();
-        let errorMessage = "Login failed";
-        try {
-          const errorData = JSON.parse(text);
-          errorMessage = errorData.message || errorMessage;
-        } catch {}
-        throw new Error(errorMessage);
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Login failed");
       }
 
+      const result = await response.json();
+      localStorage.setItem("token", result.access_token);
       router.push("/dashboard");
       router.refresh();
     } catch (err) {
@@ -81,7 +78,7 @@ export default function LoginPage() {
               id="email"
               type="email"
               autoComplete="email"
-              className={`input-field ${errors.email ? "border-red-500" : "" }`}
+              className={`input-field ${errors.email ? "border-red-500" : ""}`}
               {...register("email")}
             />
             {errors.email && (
