@@ -26,28 +26,21 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterInput) => {
     setIsLoading(true);
     setError(null);
-
     try {
-      const response = await fetch("/api/auth/sign-up/email", {
+      const response = await fetch(`https://muahmmadmustafa-hackathon3.hf.space/api/v1/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: data.email,
           password: data.password,
           name: data.name,
+          role: data.role,
         }),
       });
-
       if (!response.ok) {
-        const text = await response.text();
-        let errorMessage = "Registration failed";
-        try {
-          const errorData = JSON.parse(text);
-          errorMessage = errorData.message || errorMessage;
-        } catch {}
-        throw new Error(errorMessage);
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Registration failed");
       }
-
       router.push("/auth/login?registered=true");
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
@@ -71,13 +64,13 @@ export default function RegisterPage() {
 
         <form className="mt-8 space-y-4" onSubmit={handleSubmit(onSubmit)}>
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm ">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="name" className="label-text" >
+            <label htmlFor="name" className="label-text">
               Name (optional)
             </label>
             <input
@@ -90,7 +83,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label htmlFor="email" className="label-text" >
+            <label htmlFor="email" className="label-text">
               Email address
             </label>
             <input
