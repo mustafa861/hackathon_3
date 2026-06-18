@@ -175,7 +175,7 @@ function QuizPanel({ questions, onBack }: { questions: QuizQuestion[]; onBack: (
     const pct = Math.round((score / questions.length) * 100);
     return (
       <div className="bg-white shadow-sm rounded-lg border border-gray-200 p-8 text-center">
-        <h3 className="text-2xl font-bold mb-4">Quiz Complete!</h3>
+        <h3 className="text-2xl font-bold mb-4 text-gray-900">Quiz Complete!</h3>
         <p className="text-4xl font-bold mb-2 text-blue-600">{score}/{questions.length}</p>
         <p className="text-lg text-gray-600 mb-6">You scored {pct}%</p>
         <button
@@ -200,7 +200,7 @@ function QuizPanel({ questions, onBack }: { questions: QuizQuestion[]; onBack: (
           style={{ width: `${((current + 1) / questions.length) * 100}%` }}
         />
       </div>
-      <p className="text-lg font-medium mb-4">{q.question}</p>
+      <p className="text-lg font-medium mb-4 text-gray-900">{q.question}</p>
       {q.code && (
         <pre className="bg-gray-900 text-green-300 p-4 rounded-lg font-mono text-sm mb-6 whitespace-pre-wrap">
           {q.code}
@@ -221,7 +221,7 @@ function QuizPanel({ questions, onBack }: { questions: QuizQuestion[]; onBack: (
                     : "border-gray-200 text-gray-400"
                 : selected === i
                   ? "border-blue-500 bg-blue-50 text-blue-800"
-                  : "border-gray-200 hover:border-gray-300"
+                  : "border-gray-200 hover:border-gray-300 text-gray-900"
             }`}
           >
             {opt}
@@ -372,7 +372,7 @@ export default function ChatPage() {
               <div>
                 {!selectedModule ? (
                   <div className="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
-                    <h3 className="text-lg font-semibold mb-4">Choose a Quiz Module</h3>
+                    <h3 className="text-lg font-semibold mb-4 text-gray-900">Choose a Quiz Module</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       {Object.keys(QUIZ_MODULES).map((mod) => (
                         <button
