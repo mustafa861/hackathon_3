@@ -20,14 +20,14 @@ export async function POST(request: Request) {
 
     const data = await response.json();
     return NextResponse.json(data);
-  } catch {
-    return NextResponse.json(
-      {
-        output: "Note: Backend is not running. Code execution requires the backend server.\n\nTo run the backend:\n  cd learnflow-app/backend\n  pip install -r requirements.txt\n  uvicorn app.main:app --reload",
-        error: null,
-        status: "success",
-      },
-      { status: 200 }
-    );
-  }
+} catch {
+  return NextResponse.json(
+    {
+      output: null,
+      error: "Failed to connect to backend. Please try again.",
+      status: "error",
+    },
+    { status: 200 }
+  );
+}
 }
