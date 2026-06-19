@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   return NextResponse.json(
     {
       output: null,
-      error: "Failed to connect to backend. Please try again.",
+      error: "Failed to connet to backend. Please try again.",
       status: "error",
     },
     { status: 200 }
