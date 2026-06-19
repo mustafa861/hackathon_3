@@ -47,7 +47,7 @@ export default function ExerciseGenerator({ onGenerate }: ExerciseGeneratorProps
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold flex items-center gap-2">
+      <h3 className="text-lg black font-semibold flex items-center gap-2">
         <Wand2 size={20} className="text-purple-500" />
         Exercise Generator
       </h3>
