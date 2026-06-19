@@ -12,7 +12,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const response = await fetch(`${process.env.BACKEND_URL || "http://localhost:8000"}/api/v1/code/execute`, {
+    const response = await fetch(`${process.env.BACKEND_URL || "https://muahmmadmustafa-hackathon3.hf.space"}/api/v1/code/execute`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code, language, timeout: 30 }),
