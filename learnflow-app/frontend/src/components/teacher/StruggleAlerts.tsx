@@ -37,7 +37,7 @@ export default function StruggleAlerts({ alerts, onAssignExercise }: StruggleAle
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold flex items-center gap-2">
+      <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
         <AlertTriangle size={20} className="text-red-500" />
         Struggle Alerts ({alerts.length})
       </h3>
@@ -59,7 +59,7 @@ export default function StruggleAlerts({ alerts, onAssignExercise }: StruggleAle
                   <div className="flex items-start gap-3">
                     <Icon size={20} className="text-red-500 mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="font-medium">{alert.studentName}</p>
+                      <p className="font-medium text-gray-900">{alert.studentName}</p>
                       <p className="text-sm text-gray-600">
                         {alert.module} - {alert.topic}
                       </p>
