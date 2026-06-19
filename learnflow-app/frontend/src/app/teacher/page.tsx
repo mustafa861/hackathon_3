@@ -106,7 +106,7 @@ useEffect(() => {
       </nav>
 
       <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-2xl font-bold mb-6">Teacher Dashboard</h1>
+        <h1 className="text-black font-bold mb-6">Teacher Dashboard</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
