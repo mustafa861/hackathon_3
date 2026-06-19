@@ -23,7 +23,7 @@ export async function POST(request: Request) {
   } catch {
     return NextResponse.json(
       {
-        output: "hello world",
+        output: "Note: Backend is not running. Code execution requires the backend server.\n\nTo run the backend:\n  cd learnflow-app/backend\n  pip install -r requirements.txt\n  uvicorn app.main:app --reload",
         error: null,
         status: "success",
       },
