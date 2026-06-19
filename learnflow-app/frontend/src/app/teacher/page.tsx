@@ -61,29 +61,20 @@ export default function TeacherPage() {
   const [loading, setLoading] = useState(true);
   const [students, setStudents] = useState<Student[]>(SAMPLE_STUDENTS);
 
-  useEffect(() => {
-    async function fetchSession() {
-      try {
-        const res = await fetch("/api/auth/session");
-        const data = await res.json();
-        if (data?.user) {
-          if (data.user.role !== "TEACHER") {
-            router.push("/dashboard");
-            return;
-          }
-          setUser(data.user);
-        } else {
-          router.push("/auth/login");
-        }
-      } catch {
-        router.push("/auth/login");
-      } finally {
-        setLoading(false);
-      }
+useEffect(() => {
+  const stored = localStorage.getItem("user");
+  if (stored) {
+    const parsedUser = JSON.parse(stored);
+    if (parsedUser.role !== "TEACHER") {
+      router.push("/dashboard");
+      return;
     }
-    fetchSession();
-  }, [router]);
-
+    setUser(parsedUser);
+  } else {
+    router.push("/auth/login");
+  }
+  setLoading(false);
+}, [router]);
   const handleAssignExercise = async (studentId: string, topic: string) => {
     console.log(`Assigning exercise on ${topic} to student ${studentId}`);
   };
