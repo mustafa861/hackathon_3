@@ -263,17 +263,12 @@ export default function ChatPage() {
   const [selectedModule, setSelectedModule] = useState<string | null>(null);
 
   useEffect(() => {
-    const demoUser: User = {
-      id: "demo",
-      email: "demo@learnflow.ai",
-      name: "Demo User",
-      role: "STUDENT",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    setUser(demoUser);
-    setLoading(false);
-  }, []);
+  const stored = localStorage.getItem("user");
+  if (stored) {
+    setUser(JSON.parse(stored));
+  }
+  setLoading(false);
+}, []);
 
   if (loading) {
     return (
